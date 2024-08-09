@@ -17,4 +17,4 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt update \ 
     && apt upgrade -y \ 
-    && apt -y install --no-install-recommends qemu-system qemu-user
+    && apt -y install qemu-system qemu-user 
