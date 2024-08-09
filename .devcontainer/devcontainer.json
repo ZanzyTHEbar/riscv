@@ -19,7 +19,8 @@
 			"extensions": [
 				"ms-vscode.makefile-tools",
 				"rihong.riscv-extension",
-				"zhwu95.riscv"
+				"zhwu95.riscv",
+				"penguinsnail.riscv-formatter"
 			]
 		}
 	}
