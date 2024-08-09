@@ -6,7 +6,7 @@ ARG REINSTALL_CMAKE_VERSION_FROM_SOURCE="3.22.2"
 COPY ./reinstall-cmake.sh /tmp/
 
 RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
-        chmod +x /tmp/reinstall-cmake.sh && /tmp/reinstall-cmake.sh ${REINSTALL_CMAKE_VERSION_FROM_SOURCE}; \
+    chmod +x /tmp/reinstall-cmake.sh && /tmp/reinstall-cmake.sh ${REINSTALL_CMAKE_VERSION_FROM_SOURCE}; \
     fi \
     && rm -f /tmp/reinstall-cmake.sh
 
@@ -17,4 +17,4 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt update \ 
     && apt upgrade -y \ 
-    && apt -y install qemu-system qemu-user gcc-riscv64-linux-gnu gcc-riscv32-linux-gnu
+    && apt -y install qemu-system qemu-user gcc-riscv64-linux-gnu gcc-riscv64-unknown-elf
