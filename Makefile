@@ -50,5 +50,16 @@ clean:
 	@echo "  CLEAN"
 	@rm -rf $(BUILD_DIR)
 
+
+help:
+	@echo "Makefile for Go RISC-V cross-compilation and QEMU emulation"
+	@echo "Usage:"
+	@echo "  make all        - Build the target"
+	@echo "  make run        - Run the target with QEMU"
+	@echo "  make run-debug   - Run the target with QEMU and GDB server"
+	@echo "  make clean      - Clean up build artifacts"
+	@echo "  make help       - Show this help message"
+
+
 # Phony targets
 .PHONY: all run run-debug clean
