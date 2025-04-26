@@ -47,7 +47,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get install -y qemu-user-static \
     && rm -rf /var/lib/apt/lists/*
 
-    #RUN update-binfmts --display qemu-riscv64
+#RUN update-binfmts --display qemu-riscv64
 #RUN update-binfmts --display qemu-riscv64-static
 # Note: binfmt_misc registration might require the container to run with --privileged
 # or specific capabilities, depending on the host system's configuration.
