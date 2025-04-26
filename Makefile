@@ -16,7 +16,7 @@ TARGET_NAME = hello # Assuming the main package is in hello.go or similar
 TARGET = $(BUILD_DIR)/$(TARGET_NAME)
 
 # Flags
-GOFLAGS = -ldflags="-s -w" # Optional: flags to strip debug info and symbol table for smaller binary
+GOFLAGS = -ldflags="-s -w" -buildvcs=false # Optional: flags to strip debug info and symbol table for smaller binary
 GDB_PORT = 1234
 
 # Default target

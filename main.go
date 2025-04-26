@@ -1,6 +1,14 @@
 package main
 
+// Placeholder
+
 func main(){
-	// This is a simple Go program that prints "Hello, World!" to the console.
 	println("Hello, World!")
+	sum := add(10, 16)
+	println(sum)
+}
+
+
+func add(a, b int) int {
+    return a + b
 }
