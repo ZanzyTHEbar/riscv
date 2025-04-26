@@ -53,3 +53,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 # Note: binfmt_misc registration might require the container to run with --privileged
 # or specific capabilities, depending on the host system's configuration.
 # Often, the registration is handled by the qemu-user-static package installation.
+
+# Install Delve debugger for Go
+
+RUN go install github.com/go-delve/delve/cmd/dlv@latest

@@ -5,29 +5,144 @@
             "path": "."
         }
     ],
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Build (Release)",
+                "type": "shell",
+                "command": "make",
+                "args": [
+                    "all"
+                ],
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                },
+                "presentation": {
+                    "reveal": "always",
+                    "echo": true,
+                    "focus": false,
+                    "panel": "shared",
+                    "showReuseMessage": true,
+                    "clear": false
+                },
+                "problemMatcher": [
+                    "$go"
+                ]
+            },
+            {
+                "label": "Build for Debug",
+                "type": "shell",
+                "command": "make",
+                "args": [
+                    "build-debug"
+                ],
+                "group": "build",
+                "presentation": {
+                    "reveal": "always",
+                    "echo": true,
+                    "focus": false,
+                    "panel": "shared",
+                    "showReuseMessage": true,
+                    "clear": false
+                },
+                "problemMatcher": [
+                    "$go"
+                ]
+            },
+            {
+                "label": "Run",
+                "type": "shell",
+                "command": "make",
+                "args": [
+                    "run"
+                ],
+                "dependsOn": [
+                    "Build (Release)"
+                ],
+                "presentation": {
+                    "reveal": "always",
+                    "echo": true,
+                    "focus": true,
+                    "panel": "dedicated",
+                    "showReuseMessage": false,
+                    "clear": true
+                },
+                "problemMatcher": []
+            },
+            {
+                "label": "Start QEMU Debug Server",
+                "type": "shell",
+                "command": "qemu-riscv64",
+                "args": [
+                    "-g",
+                    "2345",
+                    "${workspaceFolder}/bin/hello"
+                ],
+                "dependsOn": [
+                    "Build for Debug"
+                ],
+                "isBackground": true,
+                "presentation": {
+                    "reveal": "always",
+                    "echo": true,
+                    "focus": false,
+                    "panel": "dedicated",
+                    "showReuseMessage": false,
+                    "clear": true
+                },
+                "problemMatcher": {
+                    "pattern": [
+                        {
+                            "regexp": ".*",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "^$",
+                        "endsPattern": "^$"
+                    }
+                }
+            },
+            {
+                "label": "Clean",
+                "type": "shell",
+                "command": "make",
+                "args": [
+                    "clean"
+                ],
+                "group": "build",
+                "presentation": {
+                    "reveal": "silent",
+                    "echo": true,
+                    "focus": false,
+                    "panel": "shared",
+                    "showReuseMessage": false,
+                    "clear": false
+                },
+                "problemMatcher": []
+            }
+        ]
+    },
     "launch": {
         "version": "0.2.0",
         "configurations": [
             {
-                "name": "C/C++ Runner: Debug Session",
-                "type": "cppdbg",
-                "request": "launch",
-                "args": [],
-                "stopAtEntry": false,
-                "externalConsole": false,
+                "name": "Attach to QEMU (Delve)",
+                "type": "go",
+                "request": "attach",
+                "mode": "remote",
+                "remotePath": "",
+                "port": 2345,
+                "host": "localhost",
+                "program": "${workspaceFolder}/bin/hello",
                 "cwd": "${workspaceFolder}",
-                "program": "${workspaceFolder}/build/${workspaceFolderBasename}.out",
-                "stopAtConnect": false,
-                "MIMode": "gdb",
-                "miDebuggerPath": "gdb",
-                "setupCommands": [
-                    {
-                        "description": "Enable pretty-printing for gdb",
-                        "text": "-enable-pretty-printing",
-                        "ignoreFailures": true
-                    }
-                ],
-                "preLaunchTask": "build"
+                "debugAdapter": "dlv-dap",
+                "preLaunchTask": "Start QEMU Debug Server"
             }
         ]
     },
@@ -88,6 +203,26 @@
         "C_Cpp_Runner.useLeakSanitizer": false,
         "C_Cpp_Runner.showCompilationTime": false,
         "C_Cpp_Runner.useLinkTimeOptimization": false,
-        "C_Cpp_Runner.msvcSecureNoWarnings": false
+        "C_Cpp_Runner.msvcSecureNoWarnings": false,
+        "go.delveConfig": {
+            "dlvLoadConfig": {
+                "followPointers": true,
+                "maxVariableRecurse": 1,
+                "maxStringLen": 64,
+                "maxArrayValues": 64,
+                "maxStructFields": -1
+            },
+            "apiVersion": 2,
+            "showGlobalVariables": true
+        },
+        "go.alternateTools": {
+            "dlv": "/go/bin/dlv"
+        },
+        "go.toolsManagement.autoUpdate": true,
+        "go.useLanguageServer": true,
+        "go.lintTool": "golangci-lint",
+        "go.lintFlags": [
+            "--fast"
+        ]
     }
 }

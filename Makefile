@@ -17,7 +17,7 @@ TARGET = $(BUILD_DIR)/$(TARGET_NAME)
 
 # Flags
 GOFLAGS = -ldflags="-s -w" -buildvcs=false # Optional: flags to strip debug info and symbol table for smaller binary
-GDB_PORT = 1234
+DEBUG_PORT = 2345 # Port for the debug server (QEMU's GDB stub)
 
 # Default target
 all: $(TARGET)
@@ -36,14 +36,21 @@ run: $(TARGET)
 	@echo "  QEMU    $<"
 	@$(QEMU) $<
 
-# Run target with GDB server (user-mode emulation)
-# Note: Delve (dlv) is the standard Go debugger. 
-# While gdb-multiarch might work, Delve is recommended for Go debugging.
-# To use gdb: In another terminal, run: gdb-multiarch -ex "target remote :$(GDB_PORT)" $(TARGET)
-run-debug: GOFLAGS= # Build with debug info for gdb
-run-debug: $(TARGET)
-	@echo "  QEMU-GDB $< (Port: $(GDB_PORT))"
-	@$(QEMU) -g $(GDB_PORT) $<
+# Build target with debug symbols (for Delve/GDB)
+build-debug: GOFLAGS= # Ensure debug symbols are included
+build-debug: $(SRC) | $(BUILD_DIR)
+	@echo "  GO BUILD DEBUG $(GOARCH) $(TARGET)"
+	@GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO) build $(GOFLAGS) -o $(TARGET) $(SRC_DIR)
+
+# Run target with Debug server (user-mode emulation) - MANUAL STEP NOW
+# Use VS Code Task "Start QEMU Debug Server" instead.
+# This starts QEMU with a GDB server stub listening on the specified port.
+# Delve can connect to this stub.
+# To connect with Delve: In another terminal, run: dlv connect localhost:$(DEBUG_PORT)
+# run-debug: build-debug
+# 	@echo "  QEMU-DEBUG $< (Port: $(DEBUG_PORT))"
+# 	@echo "  Waiting for Delve connection on localhost:$(DEBUG_PORT)..."
+# 	@$(QEMU) -g $(DEBUG_PORT) $<
 
 # Clean target
 clean:
@@ -54,12 +61,13 @@ clean:
 help:
 	@echo "Makefile for Go RISC-V cross-compilation and QEMU emulation"
 	@echo "Usage:"
-	@echo "  make all        - Build the target"
-	@echo "  make run        - Run the target with QEMU"
-	@echo "  make run-debug   - Run the target with QEMU and GDB server"
-	@echo "  make clean      - Clean up build artifacts"
-	@echo "  make help       - Show this help message"
+	@echo "  make all          - Build the target (potentially stripped)"
+	@echo "  make build-debug  - Build the target with debug symbols"
+	@echo "  make run          - Run the target with QEMU"
+	@echo "  make clean        - Clean up build artifacts"
+	@echo "  make help         - Show this help message"
+	@echo "Debugging: Use VS Code tasks ('Build for Debug', 'Start QEMU Debug Server') and launch config ('Attach to QEMU (Delve)')"
 
 
 # Phony targets
-.PHONY: all run run-debug clean
+.PHONY: all run build-debug clean help
