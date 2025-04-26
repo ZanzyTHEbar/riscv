@@ -41,10 +41,10 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt upgrade -y \ 
     && apt -y install git build-essential wget python3 unzip gcc g++ \
      qemu-system qemu-system-riscv64 qemu-user gcc-riscv64-linux-gnu gcc-riscv64-unknown-elf \ 
-     gdb-multiarch rsync cpio lubncurses-dev bc flex bison libssl-dev libelf-dev
+     gdb-multiarch rsync cpio libncurses-dev bc flex bison libssl-dev libelf-dev
 
 # Install static qemu user binaries and register binfmt_misc handlers
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get install -y qemu-user-static \
     && rm -rf /var/lib/apt/lists/*
 
