@@ -1,4 +1,3 @@
-# Use an official Go image as a builder stage
 FROM golang:1.24.2-bookworm AS go-builder
 
 # Set up a working directory
@@ -40,7 +39,9 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt update \ 
     && apt upgrade -y \ 
-    && apt -y install qemu-system qemu-user gcc-riscv64-linux-gnu gcc-riscv64-unknown-elf gdb-multiarch
+    && apt -y install git build-essential wget python3 unzip gcc g++ \
+     qemu-system qemu-system-riscv64 qemu-user gcc-riscv64-linux-gnu gcc-riscv64-unknown-elf \ 
+     gdb-multiarch rsync cpio lubncurses-dev bc flex bison libssl-dev libelf-dev
 
 # Install static qemu user binaries and register binfmt_misc handlers
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
